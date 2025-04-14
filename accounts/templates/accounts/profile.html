@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h4>اطلاعات کاربری</h4>
+                </div>
+                <div class="card-body">
+                    <p><strong>نام کاربری:</strong> {{ user.username }}</p>
+                    <p><strong>نوع حساب:</strong> {{ user_type }}</p>
+                    <p><strong>تلفن:</strong> {{ profile.phone }}</p>
+                    <p><strong>سازمان:</strong> {{ profile.organization }}</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header bg-info text-white">
+                    <h4>ویرایش پروفایل</h4>
+                </div>
+                <div class="card-body">
+                    <form method="post">
+                        {% csrf_token %}
+                        {{ form.as_p }}
+                        <button type="submit" class="btn btn-success">ذخیره تغییرات</button>
+                    </form>
+                </div>
+            </div>
+            
+            {% if user.user_type == 'admin' %}
+            <div class="card mt-3">
+                <div class="card-header bg-warning">
+                    <h5>امکانات مدیریتی</h5>
+                </div>
+                <div class="card-body">
+                    <a href="/admin/" class="btn btn-dark">پنل ادمین</a>
+                    <a href="{% url 'user_management' %}" class="btn btn-secondary">مدیریت کاربران</a>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
