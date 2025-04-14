@@ -35,11 +35,7 @@ INSTALLED_APPS = [
     'accounts.apps.AccountsConfig',
     'crispy_forms',
     'crispy_bootstrap5',
-    'apps.myaccounting',
-    'django_tables2',
-    'django_filters',
-    'widget_tweaks',
-]
+   ]
 
 # تنظیمات Crispy Forms
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
