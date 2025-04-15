@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="accounting-layout">
+    {% include "accounting/partials/_sidebar.html" %}
+    <div class="accounting-main">
+        {% include "accounting/partials/_navbar.html" %}
+        <div class="accounting-content">
+            {% block accounting_content %}{% endblock %}
+        </div>
+    </div>
+</div>
+{% endblock %}
