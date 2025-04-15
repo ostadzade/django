@@ -1,3 +1,65 @@
+D:\project\mygis\accounts\admin.py
+from django.contrib import admin
+from django.contrib.auth.admin import UserAdmin
+from django.contrib.auth.models import User
+from .models import Profile
+
+# ابتدا ثبت قبلی User را لغو کنید (اگر نیاز به سفارشی‌سازی دارید)
+admin.site.unregister(User)
+
+# تعریف UserAdmin سفارشی
+class CustomUserAdmin(UserAdmin):
+    list_display = ('username', 'email', 'first_name', 'last_name', 'is_staff')
+    list_filter = ('is_staff', 'is_superuser', 'is_active')
+    search_fields = ('username', 'first_name', 'last_name', 'email')
+
+# ثبت مدل User با ادمین سفارشی
+admin.site.register(User, CustomUserAdmin)
+
+# ثبت مدل Profile
+@admin.register(Profile)
+class ProfileAdmin(admin.ModelAdmin):
+    list_display = ('user', 'phone', 'address')
+    search_fields = ('user__username', 'phone')
+	
+D:\project\mygis\apps\myaccounting\admin.py
+from django.contrib import admin
+from .models import (
+    Account, 
+    Journal, 
+    AccountMove, 
+    AccountMoveLine, 
+    Partner, 
+    Company, 
+    Currency
+)
+
+@admin.register(Account)
+class AccountAdmin(admin.ModelAdmin):
+    list_display = ('code', 'name', 'account_type', 'parent')
+    list_filter = ('account_type', 'is_active')
+    search_fields = ('code', 'name')
+
+@admin.register(Journal)
+class JournalAdmin(admin.ModelAdmin):
+    list_display = ('name', 'code', 'type')
+    list_filter = ('type',)
+
+@admin.register(AccountMove)
+class MoveAdmin(admin.ModelAdmin):
+    list_display = ('id', 'journal', 'date', 'ref', 'state')
+    list_filter = ('journal', 'state', 'date')
+
+@admin.register(AccountMoveLine)
+class MoveLineAdmin(admin.ModelAdmin):
+    list_display = ('move', 'account', 'debit', 'credit')
+    list_filter = ('account',)
+
+admin.site.register(Partner)
+admin.site.register(Company)
+admin.site.register(Currency)
+
+D:\project\mygis\mygis\settings.py
 """
 Django settings for mygis project.
 
@@ -32,18 +94,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    
-    # اپلیکیشن‌های شخصی
-    'accounts.apps.AccountsConfig', 
-
-    'apps.myaccounting',
-    
-    # کتابخانه‌های جانبی
+    'accounts.apps.AccountsConfig',
     'crispy_forms',
     'crispy_bootstrap5',
-]
-
-AUTH_USER_MODEL = 'accounts.CustomUser'  # تغییر از 'accounts.User' به 'accounts.CustomUser'
+    'apps.myaccounting',
+   ]
 
 # تنظیمات Crispy Forms
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
@@ -136,3 +191,4 @@ LOGOUT_REDIRECT_URL = 'login'  # اضافه شده
 
 # تنظیمات ایمیل (برای توسعه)
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'  # اضافه شده
+	
